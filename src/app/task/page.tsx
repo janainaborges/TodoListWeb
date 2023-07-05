@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { List } from "@/components/List";
+import Layout from "@/components/layout";
 
 interface Task {
   id: number;
   text: string;
   selected: boolean;
   createdAt: string;
+  title: string;
 }
 
 export default function TodoList() {
@@ -75,60 +77,63 @@ export default function TodoList() {
   };
 
   const handleEdit = (item: any) => {
-    router.push(`${item.id}`)
-  }
+    router.push(`${item.id}`);
+  };
 
   const countSelectedTasks = () => selectedTasks.length;
 
   return (
-    <div className="p-8">
-      <header className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold">{currentWeekday}</h1>
-          <h3 className="text-lg">{currentDate}</h3>
+    <Layout>
+      <div className="p-3 w-full h-screen flex flex-col justify-between ">
+        <header className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-fuchsia-700">
+              {currentWeekday}
+            </h1>
+            <h3 className="text-sm">{currentDate}</h3>
+          </div>
+          <div className="w-12 h-12 bg-gray-200 rounded-full flex justify-center items-center"></div>
+        </header>
+        <div className="mb-8 flex flex-row justify-between ">
+          <h1 className="text-md font-bold mb-2">Task List</h1>
+          <h2 className="text-sm text-fuchsia-700">
+            {countSelectedTasks()}/{countTotalTasks()} Tasks finished
+          </h2>
         </div>
-        <div className="w-12 h-12 bg-gray-200 rounded-full flex justify-center items-center">
-         
-        </div>
-      </header>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">Task List</h1>
-        <h2 className="text-lg text-gray-600">
-          {countSelectedTasks()}/{countTotalTasks()} Tasks finished
-        </h2>
-      </div>
-      {selectedTasks.length > 0 && (
-        <div className="mb-8">
-          {selectedTasks.map((item) => (
-            <List
-              key={item.id}
-              item={item}
-              onCheckboxChange={handleSelectedCheckboxChange}
-              onEditTask={function (id: number): void {
-                throw new Error("Function not implemented.");
-              }}
-            />
-          ))}
-        </div>
-      )}
+        <div className="h-4/5">
+          {selectedTasks.length > 0 && (
+            <div className="mb-8 border rounded bg-gradient-to-br from-purple-700 via-purple-500 to-pink-500">
+              {selectedTasks.map((item) => (
+                <List
+                  key={item.id}
+                  item={item}
+                  checked={true}
+                  onCheckboxChange={handleSelectedCheckboxChange}
+                  onEditTask={() => handleEdit(item)}
+                />
+              ))}
+            </div>
+          )}
 
-      <div>
-        {tasks.map((item) => (
-          <List
-            key={item.id}
-            item={item}
-            onCheckboxChange={handleCheckboxChange}
-            onEditTask={() => handleEdit(item)}
-          />
-        ))}
+          <div>
+            {tasks.map((item) => (
+              <List
+                key={item.id}
+                item={item}
+                checked={false}
+                onCheckboxChange={handleCheckboxChange}
+                onEditTask={() => handleEdit(item)}
+              />
+            ))}
+          </div>
+        </div>
+        <button
+          className="mb-8 border rounded bg-gradient-to-br from-purple-700 via-purple-500 to-pink-500 text-white py-6 px-4 mt-8 w-full "
+          onClick={handleGoToCreateTaskPage}
+        >
+          Create Task
+        </button>
       </div>
-
-      <button
-        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mt-8"
-        onClick={handleGoToCreateTaskPage}
-      >
-        Create Task
-      </button>
-    </div>
+    </Layout>
   );
 }
