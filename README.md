@@ -2,6 +2,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Para ver o projeto rodando, acessar esse link
+https://todo-list-web-brown.vercel.app/
+
 First, run the development server:
 
 ```bash
